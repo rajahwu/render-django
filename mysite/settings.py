@@ -11,6 +11,10 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import os
+import dj_database_url
+
+SECRET_KEY = os.environ.get('SECRET_KEY', default='')
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,12 +27,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-6bzi@kf7k$fux!h)s8ha(=y1=zqs@x!-99x%kl0_-7-%!df47g"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = 'RENDER' not in os.environ
+ALLOWED_HOSTS = []
 
-ALLOWED_HOSTS = [
-    "https://render-django-test-3gda.onrender.com"
-]
-
+RENDER_EXTERNAL_HOSTNAME = os.environ.get('RENDER_EXTERNAL_HOSTNAME')
+if RENDER_EXTERNAL_HOSTNAME:
+    ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME
 
 # Application definition
 
@@ -78,8 +82,8 @@ WSGI_APPLICATION = "mysite.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+       default='postgresql://postgres:postgres@localhost:5432/mysite',
+        conn_max_age=600
     }
 }
 
